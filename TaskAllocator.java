@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.zip.DataFormatException;
 
 public class TaskAllocator {
     private ArrayList<DataCenter> dataCenters;
@@ -9,7 +10,9 @@ public class TaskAllocator {
     double clear_i, rainy_i, cloudy_i;
     double clear_t, rainy_t, cloudy_t;
     double min, max;
+    public double hourlyEnergy = 0;
     ArrayList<Double> numbers = new ArrayList<Double>();
+    private DataCenter BestDcThisHour;
 
     public TaskAllocator(ArrayList<DataCenter> dataCenters) {
         this.dataCenters = dataCenters;
@@ -36,6 +39,8 @@ public class TaskAllocator {
         BestDc.assignTask(task);
         totalDelay += bestDelay;
 
+        hourlyEnergy = BestDc.computeHourlyEnergy();
+
         // Get information for each weather
         switch (BestDc.getWeather()) {
             case CLOUDY:
@@ -53,6 +58,15 @@ public class TaskAllocator {
             default:
                 break;
         }
+        BestDcThisHour = BestDc;
+    }
+
+    public DataCenter getBestDcThisHour() {
+        return BestDcThisHour;
+    }
+
+    public double getHourlyEnergy() {
+        return hourlyEnergy;
     }
 
     public double getTotalTaskDelay() {
@@ -92,4 +106,5 @@ public class TaskAllocator {
         max = Collections.max(numbers);
         return max;
     }
+
 }

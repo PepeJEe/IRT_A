@@ -48,10 +48,13 @@ public class Simulation {
             }
             for (DataCenter dc : dataCenters) {
                 double energy = dc.computeHourlyEnergy();
-                System.out.println("energy: " + energy);
+                // System.out.println("energy: " + energy);
                 totalEnergy += energy;
-                count++;
             }
+            DataCenter dc = allocator.getBestDcThisHour();
+            double hourlyEnergy = dc.computeHourlyEnergy();
+            System.out.println(hourlyEnergy);
+            System.out.println(dc.id);
         }
 
         double avgDelay = totalTaskDelay / totalTasks.size();
